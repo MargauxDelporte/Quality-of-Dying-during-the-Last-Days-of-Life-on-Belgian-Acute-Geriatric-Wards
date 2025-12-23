@@ -5,14 +5,6 @@ PROC IMPORT DATAFILE="/home/u26262865/data_eoldcad_subset2.0.xlsx"
     GETNAMES=YES;   /* Use column headers as variable names */
 RUN;
 
-data test;
-set rawdata2 ;
-keep eoldcad_r ;
-where hoursEOLDafterdnr is not missing;
-run;
-
-
-proc contents data=rawdata2;run;
 DATA DataAnalysis2;
     SET rawdata2(KEEP=record_id 
                               hoursEOLDafterdnr 
@@ -99,7 +91,6 @@ mygroup=type;
 run;
 
 
-/*TYPE III tests: code with intercept*/
 proc mixed data=analysis_s3 COVTEST;
 class type record_id mygroup timelcss;
 model response = type hoursEOLDafterdnr type*hoursEOLDafterdnr DurationDNRbeforedeath_h type*DurationDNRbeforedeath_h
@@ -118,3 +109,4 @@ random  intercept /subject=record_id;
 repeated mygroup /subject=record_id*hoursEOLDafterdnr type=UN r rcorr;
 where var='eoldcad';
 run;
+
